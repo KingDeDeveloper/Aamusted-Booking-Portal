@@ -672,11 +672,18 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Booking Confirmed!',
-                        text: `Your booking reference is: ${result.reference}`,
-                        confirmButtonText: 'Select Option',
-                        showCancelButton: true,
-                        cancelButtonText: 'Book Another',
-                        customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                        html: `
+                            <p class="mb-3">Your booking reference is: <strong>${result.reference}</strong></p>
+                            <p class="text-muted small">Please save this reference for your records.</p>
+                        `,
+                        confirmButtonText: 'Great!',
+                        confirmButtonColor: 'var(--primary)',
+                        customClass: { 
+                            popup: 'rounded-4 shadow-lg border-0',
+                            confirmButton: 'px-5 py-2 rounded-3 fw-bold'
+                        }
+                    }).then(() => {
+                        window.location.reload();
                     });
                     bookingForm.reset();
                     bookingForm.classList.remove('was-validated');
