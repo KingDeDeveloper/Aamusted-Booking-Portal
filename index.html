@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment - AAMUSTED Guidance & Counselling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-light: #e7f1ff;
+            --secondary: #6c757d;
+            --success: #198754;
+            --bg-body: #f8fafc;
+            --ガラス-white: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(217,100%,95%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(200,100%,95%,1) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(180,100%,98%,1) 0, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(210,100%,95%,1) 0, transparent 50%);
+            min-height: 100vh;
+            font-family: 'Outfit', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        .container-limited {
+            max-width: 600px;
+            width: 100%;
+            margin: 1.5rem auto;
+        }
+
+        .card-booking {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            overflow: visible; 
+            backdrop-filter: blur(10px);
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #9b111a 0%, #9b0c0ce6 100%);
+            padding: 2.5rem 1.5rem;
+            color: white;
+            text-align: center;
+            position: relative;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .header-section::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .logo-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .form-content {
+            padding: 1rem 1.5rem 2.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+            background: #fff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 1.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h5 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #9b111a 0%, #9b0c0ce6 100%);
+            border: none;
+            border-radius: 14px;
+            padding: 1.1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px -5px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .privacy-box {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 12px;
+            margin-top: 2rem;
+            border: 1px dashed var(--border-color);
+        }
+
+        .privacy-box i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        /* Flatpickr Premium Customization */
+        .flatpickr-calendar {
+            background: #fff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            font-family: inherit;
+        }
+
+        .flatpickr-time {
+            height: 60px;
+        }
+
+        .flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover {
+            background: var(--primary-light);
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 576px) {
+            body { padding: 0.5rem; }
+            .header-section { padding: 2rem 1rem; }
+            .form-content { padding: 1rem 1.25rem 2rem; }
+            .form-control { padding: 0.75rem 0.9rem; }
+        }
+        /* Custom Date Styling with functional icon */
+        .date-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            color: var(--primary);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .date-input-wrapper input {
+            padding-left: 2.8rem !important;
+        }
+
+        /* Input Group specifically for Time to ensure it stays functional */
+        .input-group-text {
+            background-color: #fff;
+            border-right: none;
+            padding-left: 1rem;
+            border-radius: 12px 0 0 12px !important;
+        }
+        
+        .timer-trigger-input {
+            border-left: none !important;
+            border-radius: 0 12px 12px 0 !important;
+        }
+
+        /* Ensure native date picker behaves on mobile */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: auto; height: auto;
+            color: transparent;
+            background: transparent;
+            cursor: pointer;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-limited">
+    <div class="card-booking">
+        <div class="header-section">
+            <div class="logo-box">
+                <i class="bi bi-calendar-heart fs-3"></i>
+            </div>
+            <h4 class="fw-bold mb-1">USTED</h4>
+            <p class="mb-0 opacity-75 small fw-medium">Guidance & Counselling Centre</p>
+            <h2 class="fw-bold mt-2 display-6 fs-3">Book Appointment</h2>
+        </div>
+
+        <div class="form-content">
+            <form class="needs-validation" novalidate id="bookingForm">
+                
+                <!-- Section: Personal -->
+                <div class="section-header">
+                    <i class="bi bi-person-fill text-primary"></i>
+                    <h5>Your Information</h5>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="full_name">Full Name *</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name"
+                           placeholder="Enter your full name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email *</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           placeholder="Enter your email" required>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" for="index_number">Index Number *</label>
+                        <input type="text" class="form-control" id="index_number" name="index_number"
+                               placeholder="e.g. 523..." required>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" for="phone">Phone Number *</label>
+                        <input type="tel" class="form-control" id="phone" name="phone"
+                               placeholder="024XXXXXXX" required>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label class="form-label" for="programme">Programme *</label>
+                        <select class="form-select" id="programme" name="programme" required onchange="updateDepartment()">
+                            <option value="" selected disabled>Select your programme</option>
+                            <option value="B.Sc. Information Technology Education">B.Sc. Information Technology Education</option>
+                            <option value="B.Sc. Computer Science Education">B.Sc. Computer Science Education</option>
+                            <option value="B.Sc. Mathematics Education">B.Sc. Mathematics Education</option>
+                            <option value="B.Sc. Accounting Education">B.Sc. Accounting Education</option>
+                            <option value="B.Sc. Management Education">B.Sc. Management Education</option>
+                            <option value="B.Ed. Social Studies">B.Ed. Social Studies</option>
+                            <option value="B.Sc. Electrical/Electronics Engineering Education">B.Sc. Electrical/Electronics Engineering Education</option>
+                            <option value="B.Sc. Mechanical Engineering Education">B.Sc. Mechanical Engineering Education</option>
+                            <option value="B.Sc. Automotive Engineering Education">B.Sc. Automotive Engineering Education</option>
+                            <option value="B.Sc. Construction Technology Education">B.Sc. Construction Technology Education</option>
+                            <option value="B.Sc. Wood Technology Education">B.Sc. Wood Technology Education</option>
+                            <option value="B.Sc. Fashion Design and Textiles Education">B.Sc. Fashion Design and Textiles Education</option>
+                            <option value="B.Sc. Catering and Hospitality Education">B.Sc. Catering and Hospitality Education</option>
+                            <option value="B.Sc. Food and Beverage Education">B.Sc. Food and Beverage Education</option>
+                            <option value="Other">Other (Not Listed)</option>
+                        </select>
+                        <!-- Other Programme Text Input -->
+                        <div id="other_programme_container" style="display: none;" class="mt-2 animate__animated animate__fadeIn">
+                            <label class="form-label text-primary small fw-bold" for="other_programme_text">Specify Other Programme *</label>
+                            <input type="text" class="form-control border-primary shadow-sm" id="other_programme_text" name="other_programme_text" placeholder="Type your full programme name">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="department">Department *</label>
+                        <select class="form-select" id="department" name="department" required onchange="checkOtherDept()">
+                            <option value="" selected disabled>Select Department</option>
+                            <option value="INFORMATION TECHNOLOGY EDUCATION">INFORMATION TECHNOLOGY EDUCATION</option>
+                            <option value="MATHEMATICS EDUCATION">MATHEMATICS EDUCATION</option>
+                            <option value="ACCOUNTING EDUCATION">ACCOUNTING EDUCATION</option>
+                            <option value="MANAGEMENT EDUCATION">MANAGEMENT EDUCATION</option>
+                            <option value="INTERDISCIPLINARY STUDIES">INTERDISCIPLINARY STUDIES</option>
+                            <option value="ELECTRICAL AND ELECTRONICS EDUCATION">ELECTRICAL AND ELECTRONICS EDUCATION</option>
+                            <option value="MECHANICAL AND AUTOMOTIVE EDUCATION">MECHANICAL AND AUTOMOTIVE EDUCATION</option>
+                            <option value="CONSTRUCTION AND WOOD TECHNOLOGY EDUCATION">CONSTRUCTION AND WOOD TECHNOLOGY EDUCATION</option>
+                            <option value="FASHION DESIGN AND TEXTILES EDUCATION">FASHION DESIGN AND TEXTILES EDUCATION</option>
+                            <option value="HOSPITALITY AND TOURISM EDUCATION">HOSPITALITY AND TOURISM EDUCATION</option>
+                            <option value="OTHER">OTHER (Specify Below)</option>
+                        </select>
+                        <!-- Other Department Text Input -->
+                        <div id="other_department_container" style="display: none;" class="mt-2 animate__animated animate__fadeIn">
+                            <label class="form-label text-primary small fw-bold" for="other_department_text">Specify Other Department *</label>
+                            <input type="text" class="form-control border-primary shadow-sm" id="other_department_text" name="other_department_text" placeholder="Type your department name">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="hall_of_residence">Hall of Residence *</label>
+                        <select class="form-select" id="hall_of_residence" name="hall_of_residence" required>
+                            <option value="" selected disabled>Select Hall</option>
+                            <option value="Autonomy Hall">Autonomy Hall</option>
+                            <option value="Atwima Hall">Atwima Hall</option>
+                            <option value="Opoku Ware II">Opoku Ware II</option>
+                            <option value="Winslow Hall">Winslow Hall</option>
+                            <option value="Hostel">External Hostel</option>
+                            <option value="Off-Campus">Off-Campus</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section: Schedule -->
+                <div class="section-header mt-4">
+                    <i class="bi bi-calendar-event-fill text-primary"></i>
+                    <h5>Schedule Details</h5>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="preferred_date">Preferred Date *</label>
+                        <div class="date-input-wrapper">
+                            <i class="bi bi-calendar-check text-primary"></i>
+                            <input type="date" class="form-control" id="preferred_date" name="preferred_date" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="preferred_time">Preferred Time *</label>
+                        <div class="input-group" id="time_picker_group" style="cursor: pointer;">
+                            <span class="input-group-text">
+                                <i class="bi bi-clock text-primary"></i>
+                            </span>
+                            <input type="text" class="form-control timer-trigger-input" id="preferred_time" name="preferred_time"
+                                   placeholder="Click to set time" required readonly style="background-color: #fff !important; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info border-0 bg-primary bg-opacity-10 mt-3 p-2 rounded-3 d-flex align-items-center">
+                    <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                    <span class="small text-dark opacity-75">Hours: 8 AM — 5 PM. Closed for lunch at 1 PM.</span>
+                </div>
+
+                <div class="mb-3 mt-4">
+                    <label class="form-label" for="reason">Reason (General Description)</label>
+                    <textarea class="form-control" id="reason" name="reason" rows="2"
+                              placeholder="Optional: Just a few words about why you're visiting."></textarea>
+                </div>
+
+                <div class="privacy-box">
+                    <i class="bi bi-patch-check-fill"></i>
+                    <div>
+                        <strong>Private & Secure</strong><br>
+                        Your details are confidential and only used for appointment scheduling at the GCC.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-send-fill me-2"></i><span>Send Request</span>
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    Walk-ins are also welcome.<br>
+                    <strong>USTED Kumasi Campus <br>Guidance & Counselling Center (ROB First Floor Room 30)</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        'use strict';
+        
+        // IMPORTANT: Change this URL to your Vercel Bridge URL after deployment
+        const API_BASE_URL = 'https://your-bridge-app.vercel.app'; 
+
+        const PROGRAM_MAPPINGS = {
+            "B.Sc. Information Technology Education": "INFORMATION TECHNOLOGY EDUCATION",
+            "B.Sc. Computer Science Education": "INFORMATION TECHNOLOGY EDUCATION",
+            "B.Sc. Mathematics Education": "MATHEMATICS EDUCATION",
+            "B.Sc. Accounting Education": "ACCOUNTING EDUCATION",
+            "B.Sc. Management Education": "MANAGEMENT EDUCATION",
+            "B.Ed. Social Studies": "INTERDISCIPLINARY STUDIES",
+            "B.Sc. Electrical/Electronics Engineering Education": "ELECTRICAL AND ELECTRONICS EDUCATION",
+            "B.Sc. Mechanical Engineering Education": "MECHANICAL AND AUTOMOTIVE EDUCATION",
+            "B.Sc. Automotive Engineering Education": "MECHANICAL AND AUTOMOTIVE EDUCATION",
+            "B.Sc. Construction Technology Education": "CONSTRUCTION AND WOOD TECHNOLOGY EDUCATION",
+            "B.Sc. Wood Technology Education": "CONSTRUCTION AND WOOD TECHNOLOGY EDUCATION",
+            "B.Sc. Fashion Design and Textiles Education": "FASHION DESIGN AND TEXTILES EDUCATION",
+            "B.Sc. Catering and Hospitality Education": "HOSPITALITY AND TOURISM EDUCATION",
+            "B.Sc. Food and Beverage Education": "HOSPITALITY AND TOURISM EDUCATION"
+        };
+
+        window.updateDepartment = function() {
+            const progSelect = document.getElementById('programme');
+            const deptSelect = document.getElementById('department');
+            const otherProgContainer = document.getElementById('other_programme_container');
+            const otherProgInput = document.getElementById('other_programme_text');
+            const prog = progSelect.value;
+            
+            if (prog === "Other") {
+                otherProgContainer.style.display = 'block';
+                otherProgInput.required = true;
+                deptSelect.value = "OTHER";
+                checkOtherDept(); // Expand the other dept box too
+            } else {
+                otherProgContainer.style.display = 'none';
+                otherProgInput.required = false;
+                
+                if (PROGRAM_MAPPINGS[prog]) {
+                    deptSelect.value = PROGRAM_MAPPINGS[prog];
+                    // Visual feedback
+                    deptSelect.style.borderColor = "var(--success)";
+                    setTimeout(() => deptSelect.style.borderColor = "", 1000);
+                }
+                checkOtherDept();
+            }
+        };
+
+        window.checkOtherDept = function() {
+            const deptSelect = document.getElementById('department');
+            const otherDeptContainer = document.getElementById('other_department_container');
+            const otherDeptInput = document.getElementById('other_department_text');
+            
+            if (deptSelect.value === "OTHER") {
+                otherDeptContainer.style.display = 'block';
+                otherDeptInput.required = true;
+            } else {
+                otherDeptContainer.style.display = 'none';
+                otherDeptInput.required = false;
+            }
+        };
+
+        const dateInput = document.getElementById('preferred_date');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+        }
+
+        const timePicker = flatpickr("#preferred_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K",
+            minTime: "08:00",
+            maxTime: "16:30",
+            minuteIncrement: 1,
+            static: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    const time = selectedDates[0];
+                    if (time.getHours() === 13) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Lunch Break',
+                            text: 'The counsellor is on break from 1:00 PM to 2:00 PM.',
+                            timer: 3500,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            customClass: { popup: 'rounded-4 border-0 shadow' }
+                        });
+                        instance.clear();
+                    }
+                }
+            }
+        });
+
+        // Make the whole group clickable
+        const timePickerGroup = document.getElementById('time_picker_group');
+        if(timePickerGroup) {
+            timePickerGroup.addEventListener('click', () => {
+                timePicker.open();
+            });
+        }
+
+        // Form submission via API
+        const bookingForm = document.getElementById('bookingForm');
+        
+        bookingForm.addEventListener('submit', async event => {
+            event.preventDefault();
+            
+            if (!bookingForm.checkValidity()) {
+                event.stopPropagation();
+                bookingForm.classList.add('was-validated');
+                return;
+            }
+            bookingForm.classList.add('was-validated');
+
+            // Gather data
+            const formData = new FormData(bookingForm);
+            let data = Object.fromEntries(formData.entries());
+
+            // Smart logic: Use custom values if "Other" is selected
+            if (data.programme === "Other") {
+                data.programme = data.other_programme_text || "Other";
+            }
+            if (data.department === "OTHER") {
+                data.department = data.other_department_text || "OTHER";
+            }
+
+            // Disable button and show loading...
+            const submitBtn = bookingForm.querySelector('.btn-submit');
+            const btnSpan = submitBtn.querySelector('span');
+            const icon = submitBtn.querySelector('i');
+            
+            icon.classList.remove('bi-send-fill');
+            icon.classList.add('spinner-border', 'spinner-border-sm');
+            btnSpan.innerText = ' Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/submit_booking`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    // Success! Show SweetAlert and reset form
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Booking Confirmed!',
+                        text: `Your booking reference is: ${result.reference}`,
+                        confirmButtonText: 'Select Option',
+                        showCancelButton: true,
+                        cancelButtonText: 'Book Another',
+                        customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                    });
+                    bookingForm.reset();
+                    bookingForm.classList.remove('was-validated');
+                    
+                    // Reset custom flatpickr if needed
+                    document.getElementById('preferred_time').value = "";
+                } else {
+                    // Server returned error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Submission Failed',
+                        text: result.message || 'There was an issue processing your booking.',
+                        customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                    });
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Could not reach the server. Please check your internet connection and try again.',
+                    customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                });
+            } finally {
+                // Restore button
+                icon.classList.remove('spinner-border', 'spinner-border-sm');
+                icon.classList.add('bi-send-fill');
+                btnSpan.innerText = 'Send Request';
+                submitBtn.disabled = false;
+            }
+        });
+    })();
+</script>
+</body>
+</html>
