@@ -280,7 +280,10 @@
                     <div class="col-sm-6">
                         <label class="form-label" for="index_number">Index Number *</label>
                         <input type="text" class="form-control" id="index_number" name="index_number"
-                               placeholder="e.g. 523..." required>
+                               placeholder="10-Digit Number" required
+                               pattern="\d{10}" maxlength="10" inputmode="numeric"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               title="Please enter exactly 10 digits">
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="phone">Phone Number *</label>
